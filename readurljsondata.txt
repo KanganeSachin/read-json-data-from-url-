@@ -1,0 +1,23 @@
+
+
+# read json data from url and show
+
+# basic pre-required lib for run program 
+
+from urllib.request import urlopen
+from pyspark.shell import spark
+
+# url where we get json format data
+url="https://619ca0ea68ebaa001753c9b0.mockapi.io/evaluation/dataengineer/jr/v1/users"
+
+# for read json data
+jsonData = urlopen(url).read().decode('utf-8')
+
+# convert it into rdd 
+rdd = spark.sparkContext.parallelize([jsonData])
+
+#read rdd and convert into df 
+df = spark.read.json(rdd)
+ 
+# show the data 	
+df.show() 					

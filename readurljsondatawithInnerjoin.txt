@@ -1,0 +1,20 @@
+
+# Read multiple url data and make inner join of both 
+
+from urllib.request import urlopen
+from pyspark.shell import spark
+
+# Url1 data df creation 
+url="https://619ca0ea68ebaa001753c9b0.mockapi.io/evaluation/dataengineer/jr/v1/users"
+jsonData = urlopen(url).read().decode('utf-8')
+rdd = spark.sparkContext.parallelize([jsonData])
+df = spark.read.json(rdd)
+
+# Url2 data df creation
+url2="https://619ca0ea68ebaa001753c9b0.mockapi.io/evaluation/dataengineer/jr/v1/messages"
+jsonData1 = urlopen(url2).read().decode('utf-8')
+rdd = spark.sparkContext.parallelize([jsonData1])
+df1 = spark.read.json(rdd)
+
+# join the 2 dataframe with help of inner join 
+df.join(df1,df.id ==  df1.id,"inner").show(truncate=False)
